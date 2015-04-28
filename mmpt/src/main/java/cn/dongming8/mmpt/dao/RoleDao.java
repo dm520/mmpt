@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import cn.dongming8.mmpt.commons.Constants;
 import cn.dongming8.mmpt.commons.config.ConfigUtil;
 import cn.dongming8.mmpt.commons.config.JSONManager;
-import cn.dongming8.mmpt.entity.Permission;
-import cn.dongming8.mmpt.entity.Role;
+import cn.dongming8.mmpt.entity.PermissionEntity;
+import cn.dongming8.mmpt.entity.RoleEntity;
 
 /**
  * 
@@ -30,20 +30,20 @@ public class RoleDao {
 	private static final Logger log = LoggerFactory.getLogger(RoleDao.class);
 	protected static final String ROLES_FILE = Constants.CONFIG_PATH + "roles.json";
 
-	private void write(List<Role> roleS) throws Exception {
+	private void write(List<RoleEntity> roleS) throws Exception {
 		JSONManager json = new JSONManager();
 		json.write(ROLES_FILE, roleS);
 	}
 
-	private List<Role> read() throws Exception {
+	private List<RoleEntity> read() throws Exception {
 		JSONManager json = new JSONManager();
 		@SuppressWarnings("unchecked")
-		List<Role> userRoleS = (List<Role>) json.read(ROLES_FILE, Role.class);
+		List<RoleEntity> userRoleS = (List<RoleEntity>) json.read(ROLES_FILE, RoleEntity.class);
 		return userRoleS;
 	}
 
 	// add by llf
-	public List<Role> getRoleAll() {
+	public List<RoleEntity> getRoleAll() {
 
 		try {
 			return this.read();
@@ -56,17 +56,17 @@ public class RoleDao {
 	public List<Map<String, Object>> getRoleAndPermisstAll() {
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		try {
-			List<Role> userRoles = this.read();
+			List<RoleEntity> userRoles = this.read();
 			PermissionDao pDao = new PermissionDao();
-			for (Role userRole : userRoles) {
+			for (RoleEntity userRole : userRoles) {
 				List<String> permissionIdList = userRole.getPermissionS();
-				List<Permission> permissionList = new ArrayList<Permission>();
+				List<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
 				Map<String, Object> userRoleMap = new HashMap<String, Object>();
 				userRoleMap.put("roleName", userRole.getName());
 				userRoleMap.put("rolePermissionS", permissionList);
 				for (String permissionId : permissionIdList) {
 					if (!"".equals(permissionId)) {
-						Permission permission = pDao.getPermissionById(permissionId);
+						PermissionEntity permission = pDao.getPermissionById(permissionId);
 						if (permission != null) {
 							permissionList.add(permission);
 						}/*
@@ -76,8 +76,8 @@ public class RoleDao {
 						 * log.info("----------------------------------");
 						 * log.info("permissionId = " + permissionId);
 						 * 
-						 * //属于数据源分类 Permission perType =new
-						 * Permission(permissionId); perType.setChecked(true);
+						 * //属于数据源分类 PermissionEntity perType =new
+						 * PermissionEntity(permissionId); perType.setChecked(true);
 						 * perType.setName(Constants.TABLE_TYPE_NAME[i]);
 						 * perType.setType(2);//碰撞数据源类型
 						 * permissionList.add(perType); break; } }
@@ -101,13 +101,13 @@ public class RoleDao {
 	 * @param id
 	 * @return
 	 */
-	public Role getRoleByName(String roleName) {
+	public RoleEntity getRoleByName(String roleName) {
 
-		List<Role> userRoleS = null;
-		Role result = null;
+		List<RoleEntity> userRoleS = null;
+		RoleEntity result = null;
 		try {
 			userRoleS = this.read();
-			for (Role userRole : userRoleS) {
+			for (RoleEntity userRole : userRoleS) {
 				if (userRole != null && roleName.equals(userRole.getName())) {
 					result = userRole;
 					break;
@@ -126,7 +126,7 @@ public class RoleDao {
 	 * @param permission
 	 * @throws X
 	 */
-	public void addPermission(String roleName, Permission permission) throws Exception {
+	public void addPermission(String roleName, PermissionEntity permission) throws Exception {
 		this.addPermission(roleName, permission.getId());
 	}
 
@@ -137,9 +137,9 @@ public class RoleDao {
 	 * @throws X
 	 */
 	public void addPermission(String roleName, String permissionId) throws Exception {
-		List<Role> userRoleS = this.read();
+		List<RoleEntity> userRoleS = this.read();
 		if (userRoleS != null) {
-			for (Role userRole : userRoleS) {
+			for (RoleEntity userRole : userRoleS) {
 				if (roleName.equals(userRole.getName())) {
 					List<String> permissionS = userRole.getPermissionS();
 					if (permissionS != null && !permissionS.contains(permissionId)) {
@@ -160,7 +160,7 @@ public class RoleDao {
 	 */
 	public void addPerType(String roleName, String perType) throws Exception {
 
-		Role userRole = getRoleByName(roleName);
+		RoleEntity userRole = getRoleByName(roleName);
 		List<String> rolePermissionS = userRole.getPermissionS();
 		if (!rolePermissionS.contains(perType)) {
 			rolePermissionS.add(perType);
@@ -176,7 +176,7 @@ public class RoleDao {
 	 */
 	public void delPerType(String roleName, String perType) throws Exception {
 
-		Role userRole = getRoleByName(roleName);
+		RoleEntity userRole = getRoleByName(roleName);
 		List<String> rolePermissionS = userRole.getPermissionS();
 		if (rolePermissionS.contains(perType)) {
 			rolePermissionS.remove(perType);
@@ -190,7 +190,7 @@ public class RoleDao {
 	 * @param permission
 	 * @throws X
 	 */
-	public void delPermission(String roleName, Permission permission) throws Exception {
+	public void delPermission(String roleName, PermissionEntity permission) throws Exception {
 		this.delPermission(roleName, permission.getId());
 	}
 
@@ -201,9 +201,9 @@ public class RoleDao {
 	 * @throws X
 	 */
 	public void delPermission(String roleName, String permissionId) throws Exception {
-		List<Role> userRoleS = this.read();
+		List<RoleEntity> userRoleS = this.read();
 		if (userRoleS != null) {
-			for (Role userRole : userRoleS) {
+			for (RoleEntity userRole : userRoleS) {
 				if (roleName.equals(userRole.getName())) {
 					List<String> permissionS = userRole.getPermissionS();
 					if (permissionS != null && permissionS.contains(permissionId)) {
@@ -221,8 +221,8 @@ public class RoleDao {
 	 * @param userRole
 	 * @throws X
 	 */
-	public void add(Role userRole) throws Exception {
-		List<Role> userRoleS = this.read();
+	public void add(RoleEntity userRole) throws Exception {
+		List<RoleEntity> userRoleS = this.read();
 		if (userRoleS != null) {
 			if (userRoleS.contains(userRole)) {
 				throw new Exception("该角色已经存在,请勿重新添加！");
@@ -233,8 +233,8 @@ public class RoleDao {
 		}
 	}
 
-	public void del(Role userRole) throws Exception {
-		List<Role> userRoleS = this.read();
+	public void del(RoleEntity userRole) throws Exception {
+		List<RoleEntity> userRoleS = this.read();
 		if (userRoleS != null) {
 			if (!userRoleS.contains(userRole)) {
 				// 没有该角色数据
@@ -246,9 +246,9 @@ public class RoleDao {
 		}
 	}
 
-	public void update(String roleName, Role userRole) throws Exception {
-		List<Role> userRoleS = this.read();
-		Role temp = new Role(roleName);
+	public void update(String roleName, RoleEntity userRole) throws Exception {
+		List<RoleEntity> userRoleS = this.read();
+		RoleEntity temp = new RoleEntity(roleName);
 		if (userRoleS != null) {
 			if (!userRoleS.contains(temp)) {
 				// 没有该角色数据
@@ -261,7 +261,7 @@ public class RoleDao {
 	}
 
 	public void delAll() throws Exception {
-		List<Role> userRoleS = this.read();
+		List<RoleEntity> userRoleS = this.read();
 		if (userRoleS != null) {
 			userRoleS.clear();
 			this.write(userRoleS);
@@ -283,13 +283,13 @@ public class RoleDao {
 			if (resultJson.isArray()) {
 				resultJsonArr = (JSONArray) resultJson;
 			}
-			List<Role> userRoleS = new ArrayList<Role>();
+			List<RoleEntity> userRoleS = new ArrayList<RoleEntity>();
 			for (int i = 0; i < resultJsonArr.size(); i++) {
 				JSONObject resultObj = resultJsonArr.getJSONObject(i);
 				String role = resultObj.getString("role");
 				String permissionStr = resultObj.getString("keys");
 				String[] permissionArr = StringUtils.split(permissionStr, ",");
-				Role userRole = new Role();
+				RoleEntity userRole = new RoleEntity();
 				userRole.setName(role);
 				userRole.setPermissionS(Arrays.asList(permissionArr));
 				userRoleS.add(userRole);
@@ -307,11 +307,11 @@ public class RoleDao {
 	public static void main(String[] args) throws Exception {
 		PermissionDao pd = new PermissionDao();
 		RoleDao urd = new RoleDao();
-		Role r1 = new Role();
+		RoleEntity r1 = new RoleEntity();
 		r1.setName("普通民警");
-		Role r2 = new Role();
+		RoleEntity r2 = new RoleEntity();
 		r2.setName("科长");
-		Role r3 = new Role();
+		RoleEntity r3 = new RoleEntity();
 		r3.setName("处长");
 		r1.setPermissionS(pd.getPermissionIdByType(1));
 		r3.setPermissionS(pd.getPermissionIdByType(2));

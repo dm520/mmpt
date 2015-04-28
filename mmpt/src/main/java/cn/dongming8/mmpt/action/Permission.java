@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.dongming8.mmpt.commons.config.ConfigUtil;
 import cn.dongming8.mmpt.dao.PermissionDao;
-import cn.dongming8.mmpt.entity.Permission;
+import cn.dongming8.mmpt.entity.PermissionEntity;
 
 /**
  * 用户管理
@@ -22,7 +22,7 @@ import cn.dongming8.mmpt.entity.Permission;
 public class Permission {
 	private static final Logger log = LoggerFactory.getLogger(Permission.class);
 
-	public List<?> getTreeInfo(List<Permission> permissionList) {
+	public List<?> getTreeInfo(List<PermissionEntity> permissionList) {
 		return null;
 	}
 
@@ -31,7 +31,7 @@ public class Permission {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		PermissionDao udao = new PermissionDao();
 
-		List<Permission> permissionList = null;
+		List<PermissionEntity> permissionList = null;
 
 		try {
 			permissionList = udao.getPermissionAll();
@@ -55,7 +55,7 @@ public class Permission {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		PermissionDao udao = new PermissionDao();
 
-		List<Permission> permissionList = null;
+		List<PermissionEntity> permissionList = null;
 
 		try {
 			permissionList = udao.getPermissionAll();

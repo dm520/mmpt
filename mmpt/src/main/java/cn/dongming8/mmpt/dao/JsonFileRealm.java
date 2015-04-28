@@ -22,8 +22,8 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.dongming8.mmpt.entity.Role;
-import cn.dongming8.mmpt.entity.User;
+import cn.dongming8.mmpt.entity.RoleEntity;
+import cn.dongming8.mmpt.entity.UserEntity;
 
 public class JsonFileRealm extends AuthorizingRealm {
 
@@ -144,7 +144,7 @@ public class JsonFileRealm extends AuthorizingRealm {
 
 		String[] result = new String[2];
 		UserDao ud = new UserDao();
-		User user = ud.getUserByName(userName);
+		UserEntity user = ud.getUserByName(userName);
 		result[0] = user.getPassword();
 		result[1] = user.getSalt() ;
 		return result;
@@ -152,7 +152,7 @@ public class JsonFileRealm extends AuthorizingRealm {
 
 	protected List<String> getUserRoleSForUser(String userName) throws Exception {
 		UserDao ud = new UserDao();
-		User user = ud.getUserByName(userName);
+		UserEntity user = ud.getUserByName(userName);
 		List<String> userRoleNameS = user.getRoleS();
 		return userRoleNameS;
 	}
@@ -161,7 +161,7 @@ public class JsonFileRealm extends AuthorizingRealm {
 		Set<String> permissions = new LinkedHashSet<String>();
 		for (String roleName : roleNames) {
 			RoleDao urd = new RoleDao();
-			Role userRole = urd.getRoleByName(roleName);
+			RoleEntity userRole = urd.getRoleByName(roleName);
 			List<String> rolePermissionIdS = userRole.getPermissionS();
 			for (String permissionId : rolePermissionIdS) {
 				permissions.add(permissionId);

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.dongming8.mmpt.commons.config.ConfigUtil;
 import cn.dongming8.mmpt.dao.UserDao;
-import cn.dongming8.mmpt.entity.User;
+import cn.dongming8.mmpt.entity.UserEntity;
 import cn.dongming8.mmpt.service.PermitService;
 
 /**
@@ -191,7 +191,7 @@ public class User {
 				e1.printStackTrace();
 			}
 			System.out.println(userNames);
-			User user = new User();
+			UserEntity user = new UserEntity();
 			user.setName(userNames);
 			UserDao udao = new UserDao();
 			try {
@@ -228,7 +228,7 @@ public class User {
 		if (ps.permit("user-query") || ps.isSelf(userName)) {
 			// 有权限
 			UserDao udao = new UserDao();
-			User user = udao.getUserByName(userName);
+			UserEntity user = udao.getUserByName(userName);
 			resultMap.put("success", true);
 			resultMap.put("datas", user);
 
@@ -259,8 +259,8 @@ public class User {
 			// 有查看全部用户的权限
 
 			UserDao udao = new UserDao();
-			List<User> userList = udao.getUserAll();
-			for (User user : userList) {
+			List<UserEntity> userList = udao.getUserAll();
+			for (UserEntity user : userList) {
 				user.setPassword("");
 				user.setSalt("");
 				;
@@ -287,7 +287,7 @@ public class User {
 		PermitService ps = new PermitService();
 		String userName = ps.getCurrentUserName();
 		UserDao uDao = new UserDao();
-		User user = uDao.getUserByName(userName);
+		UserEntity user = uDao.getUserByName(userName);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("userId", user.getId());
 		resultMap.put("userName", userName);

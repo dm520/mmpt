@@ -8,7 +8,7 @@ import java.util.List;
  * @author dm
  * @Time 2015-04-03 15:16
  */
-public class User {
+public class UserEntity {
 	private int id;// 用户ID
 	private String name; // 用户名
 	private String alias; // 别名
@@ -16,15 +16,15 @@ public class User {
 	private String salt; // 密码盐
 	private List<String> roleS; // 用户角色列表
 
-	public User() {
+	public UserEntity() {
 		super();
 	}
 
-	public User(int id) {
+	public UserEntity(int id) {
 		super();
 		this.id = id;
 	}
-	public User(int id, String userName) {
+	public UserEntity(int id, String userName) {
 		super();
 		this.id = id;
 		this.name = userName;
@@ -94,7 +94,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserEntity other = (UserEntity) obj;
 		if (id != other.id)
 			return false;
 		return true;

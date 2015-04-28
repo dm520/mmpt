@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.dongming8.mmpt.commons.Constants;
 import cn.dongming8.mmpt.commons.config.JSONManager;
-import cn.dongming8.mmpt.entity.Permission;
+import cn.dongming8.mmpt.entity.PermissionEntity;
 
 public class PermissionDao {
 
@@ -17,15 +17,15 @@ public class PermissionDao {
 	protected static final String PERMISSIONS_FILE = Constants.CONFIG_PATH
 			+ "permission.json";
 
-	private void write(List<Permission> permissionS) throws Exception {
+	private void write(List<PermissionEntity> permissionS) throws Exception {
 		JSONManager json = new JSONManager();
 		json.write(PERMISSIONS_FILE, permissionS);
 	}
 
-	private List<Permission> read() throws Exception {
+	private List<PermissionEntity> read() throws Exception {
 		JSONManager json = new JSONManager();
 		@SuppressWarnings("unchecked")
-		List<Permission> permissionS = (List<Permission>) json.read(PERMISSIONS_FILE, Permission.class);
+		List<PermissionEntity> permissionS = (List<PermissionEntity>) json.read(PERMISSIONS_FILE, PermissionEntity.class);
 		return permissionS;
 	}
 
@@ -34,12 +34,12 @@ public class PermissionDao {
 	 * @param type
 	 * @return
 	 */
-	public List<Permission> getPermissionByType(int type) {
-		List<Permission> permissionS = null;
-		List<Permission> result = new ArrayList<Permission>();
+	public List<PermissionEntity> getPermissionByType(int type) {
+		List<PermissionEntity> permissionS = null;
+		List<PermissionEntity> result = new ArrayList<PermissionEntity>();
 		try {
 			permissionS = this.read();
-			for (Permission permission : permissionS) {
+			for (PermissionEntity permission : permissionS) {
 				if (permission != null && type == permission.getType()) {
 					result.add(permission);
 				}
@@ -57,11 +57,11 @@ public class PermissionDao {
 	 * @return
 	 */
 	public List<String> getPermissionIdByType(int type) {
-		List<Permission> permissionS = null;
+		List<PermissionEntity> permissionS = null;
 		List<String> result = new ArrayList<String>();
 		try {
 			permissionS = this.read();
-			for (Permission permission : permissionS) {
+			for (PermissionEntity permission : permissionS) {
 				if (permission != null && type == permission.getType()) {
 					result.add(permission.getId());
 				}
@@ -81,7 +81,7 @@ public class PermissionDao {
 
 	public int getPermissionTypeById(String id) {
 		int result = 0;
-		Permission permission = getPermissionById(id);
+		PermissionEntity permission = getPermissionById(id);
 		// System.out.println(permission);
 		if (permission == null || "null".equals(permission)) {
 			result = 5;
@@ -93,7 +93,7 @@ public class PermissionDao {
 		return result;
 	}
 
-	public List<Permission> getPermissionAll() throws Exception {
+	public List<PermissionEntity> getPermissionAll() throws Exception {
 		return this.read();
 	}
 
@@ -102,13 +102,13 @@ public class PermissionDao {
 	 * @param id
 	 * @return
 	 */
-	public Permission getPermissionById(String id) {
+	public PermissionEntity getPermissionById(String id) {
 
-		List<Permission> permissionS = null;
-		Permission result = null;
+		List<PermissionEntity> permissionS = null;
+		PermissionEntity result = null;
 		try {
 			permissionS = this.read();
-			for (Permission permission : permissionS) {
+			for (PermissionEntity permission : permissionS) {
 				if (permission != null
 						&& id.equalsIgnoreCase(permission.getId())) {
 					result = permission;
@@ -127,8 +127,8 @@ public class PermissionDao {
 	 * @param permission
 	 * @throws X
 	 */
-	public void add(Permission permission) throws Exception {
-		List<Permission> permissionS = this.read();
+	public void add(PermissionEntity permission) throws Exception {
+		List<PermissionEntity> permissionS = this.read();
 		if (permissionS != null) {
 			if (permissionS.contains(permission)) {
 				throw new Exception("该权限已经存在,请勿重新添加！");
@@ -139,8 +139,8 @@ public class PermissionDao {
 		}
 	}
 
-	public void del(Permission permission) throws Exception {
-		List<Permission> permissionS = this.read();
+	public void del(PermissionEntity permission) throws Exception {
+		List<PermissionEntity> permissionS = this.read();
 		if (permissionS != null) {
 			if (!permissionS.contains(permission)) {
 				// 没有该权限数据
@@ -152,9 +152,9 @@ public class PermissionDao {
 		}
 	}
 
-	public void update(String id, Permission permission) throws Exception {
-		List<Permission> permissionS = this.read();
-		Permission temp = new Permission(id);
+	public void update(String id, PermissionEntity permission) throws Exception {
+		List<PermissionEntity> permissionS = this.read();
+		PermissionEntity temp = new PermissionEntity(id);
 		if (permissionS != null) {
 			if (!permissionS.contains(temp)) {
 				// 没有该权限数据
@@ -167,7 +167,7 @@ public class PermissionDao {
 	}
 
 	public void delAll() throws Exception {
-		List<Permission> permissionS = this.read();
+		List<PermissionEntity> permissionS = this.read();
 		if (permissionS != null) {
 			permissionS.clear();
 			this.write(permissionS);
@@ -176,15 +176,15 @@ public class PermissionDao {
 
 	public static void main(String[] args) throws Exception {
 
-		// Permission p1 = new Permission();
+		// PermissionEntity p1 = new PermissionEntity();
 		// p1.setId("loginlogout");
 		// p1.setName("登录登出");
 		// p1.setType(1);
-		// Permission p2 = new Permission();
+		// PermissionEntity p2 = new PermissionEntity();
 		// p2.setId("pz");
 		// p2.setName("碰撞全部数据源");
 		// p2.setType(2);
-		// Permission p3 = new Permission();
+		// PermissionEntity p3 = new PermissionEntity();
 		// p3.setId("person");
 		// p3.setName("人相关数据源");
 		// p3.setType(2);
@@ -197,7 +197,7 @@ public class PermissionDao {
 		// pd.getPermissionByType(1);
 		System.out.println("----");
 		PermissionDao pd = new PermissionDao();
-		List<Permission> pdList = pd.getPermissionAll();
+		List<PermissionEntity> pdList = pd.getPermissionAll();
 		System.out.println(pdList);
 
 	}

@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import cn.dongming8.mmpt.commons.config.ConfigUtil;
 import cn.dongming8.mmpt.dao.PermissionDao;
 import cn.dongming8.mmpt.dao.RoleDao;
-import cn.dongming8.mmpt.entity.Permission;
-import cn.dongming8.mmpt.entity.Role;
+import cn.dongming8.mmpt.entity.PermissionEntity;
+import cn.dongming8.mmpt.entity.RoleEntity;
 import cn.dongming8.mmpt.service.PermitService;
 
 /**
@@ -48,7 +48,7 @@ public class Role {
 			// by add llf
 			String results = "";
 			PermissionDao udao = new PermissionDao();
-			List<Permission> permissionList = null;
+			List<PermissionEntity> permissionList = null;
 			try {
 				permissionList = udao.getPermissionAll();
 				// results =
@@ -68,7 +68,7 @@ public class Role {
 				e.printStackTrace();
 			}
 
-			Role userRole = new Role();
+			RoleEntity userRole = new RoleEntity();
 			userRole.setName(roleName);
 			userRole.setPermissionS(list);
 			RoleDao uRdao = new RoleDao();
@@ -111,7 +111,7 @@ public class Role {
 			// by add llf
 			String results = "";
 			PermissionDao udao = new PermissionDao();
-			List<Permission> permissionList = null;
+			List<PermissionEntity> permissionList = null;
 			try {
 				permissionList = udao.getPermissionAll();
 				// results =
@@ -130,7 +130,7 @@ public class Role {
 				e.printStackTrace();
 			}
 
-			Role userRole = new Role();
+			RoleEntity userRole = new RoleEntity();
 			userRole.setName(roleName);
 			userRole.setPermissionS(list);
 			RoleDao uRdao = new RoleDao();
@@ -170,7 +170,7 @@ public class Role {
 
 				roleName = new String(roleName.getBytes("ISO-8859-1"));
 
-				Role userRole = uRdao.getRoleByName(roleName);
+				RoleEntity userRole = uRdao.getRoleByName(roleName);
 				List<String> rolePermissionS = userRole.getPermissionS();
 				List<String> tempList = new ArrayList<String>();
 				for (String rolePermissionId : rolePermissionS) {
@@ -305,7 +305,7 @@ public class Role {
 			 * @String roleName;
 			 */
 			String roleName = httpReq.getParameter("roleName");
-			Role userrole = new Role();
+			RoleEntity userrole = new RoleEntity();
 			userrole.setName(roleName);
 			RoleDao udao = new RoleDao();
 			try {
@@ -342,7 +342,7 @@ public class Role {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		PermitService ps = new PermitService();
 		log.info("have user-queryAll" + ps.permit("userRole-queryAll"));
-		if (ps.permit("Role-queryAll")) {
+		if (ps.permit("RoleEntity-queryAll")) {
 			// String start = httpReq.getParameter("start");
 			// String limit = httpReq.getParameter("limit");
 			// String limitStr = "limit " + start + "," + limit;
@@ -352,20 +352,20 @@ public class Role {
 			// 获取权限
 			PermissionDao perDao = new PermissionDao();
 
-			List<Permission> permissionList = null;
+			List<PermissionEntity> permissionList = null;
 			List<Map<String, Object>> userRoleS = null;
 			try {
 				permissionList = perDao.getPermissionAll();
 				userRoleS = urDao.getRoleAndPermisstAll();
 				for (Map<String, Object> userRoleMap : userRoleS) {
 					@SuppressWarnings("unchecked")
-					List<Permission> userRoleperList = (List<Permission>) userRoleMap.get("rolePermissionS");
+					List<PermissionEntity> userRoleperList = (List<PermissionEntity>) userRoleMap.get("rolePermissionS");
 					// userRoleperList.addAll(permissionList);
 					if (userRoleperList == null) {
-						userRoleperList = new ArrayList<Permission>();
+						userRoleperList = new ArrayList<PermissionEntity>();
 						userRoleMap.put("rolePermissionS", userRoleperList);
 					}
-					for (Permission p : permissionList) {
+					for (PermissionEntity p : permissionList) {
 						if (!userRoleperList.contains(p)) {
 							userRoleperList.add(p);
 						}

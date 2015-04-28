@@ -434,10 +434,10 @@ public class ConfigUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// User user =new User();
+		// UserEntity user =new UserEntity();
 		// user.setUserId("1");
 		// user.setUserDesc("sdfsdfsdf");
-		// List<User> listUser = new ArrayList<User>();
+		// List<UserEntity> listUser = new ArrayList<UserEntity>();
 		// listUser.add(user);
 		// System.out.println(JSONUtils.isArray(listUser));
 		// System.out.println(JSONUtils.isObject(user));
@@ -464,10 +464,10 @@ public class ConfigUtil {
 		 * System.out.println(json.toString()); CalendarConfig
 		 * c=(CalendarConfig)JSONObject.toBean(json, CalendarConfig.class);
 		 * System.out.println(c.getUserList().size());
-		 * List<User>userList=c.getUserList(); for (Iterator iterator =
+		 * List<UserEntity>userList=c.getUserList(); for (Iterator iterator =
 		 * userList.iterator(); iterator.hasNext();) { if(iterator.next()
-		 * instanceof User) { System.out.println(iterator.next().toString());
-		 * User name = (User) iterator.next();
+		 * instanceof UserEntity) { System.out.println(iterator.next().toString());
+		 * UserEntity name = (UserEntity) iterator.next();
 		 * System.out.println(name.getUserName()); }else{
 		 * System.out.println("-------------------"); } }
 		 */

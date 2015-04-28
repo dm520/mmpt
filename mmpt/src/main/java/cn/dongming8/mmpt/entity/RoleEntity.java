@@ -8,22 +8,22 @@ import java.util.List;
  * @author dm
  * @Time 2015-04-03 15:23
  */
-public class Role {
+public class RoleEntity {
 
 	private String id;// 角色ID
 	private String name;// 超级管理员、管理员、xx科室民警、科长、处长
 	private List<String> permissionS;// 权限
 
-	public Role() {
+	public RoleEntity() {
 		super();
 	}
 
-	public Role(String id) {
+	public RoleEntity(String id) {
 		super();
 		this.id = id;
 	}
 
-	public Role(String id, String name) {
+	public RoleEntity(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -78,7 +78,7 @@ public class Role {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Role other = (Role) obj;
+		RoleEntity other = (RoleEntity) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

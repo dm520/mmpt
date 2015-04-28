@@ -1,20 +1,20 @@
 package cn.dongming8.mmpt.entity;
 
-public class Permission {
+public class PermissionEntity {
 	private String id;
 	private String name;// 权限
 	private int type;// 1基础权限，2审计权限，3报表权限，4用户管理
 
-	public Permission() {
+	public PermissionEntity() {
 		super();
 	}
 
-	public Permission(String id) {
+	public PermissionEntity(String id) {
 		super();
 		this.id = id;
 	}
 
-	public Permission(String id, String name, int type) {
+	public PermissionEntity(String id, String name, int type) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -47,7 +47,7 @@ public class Permission {
 
 	@Override
 	public String toString() {
-		return "Permission [id=" + id + ", name=" + name + ", type=" + type
+		return "PermissionEntity [id=" + id + ", name=" + name + ", type=" + type
 				+ "]";
 	}
 
@@ -67,7 +67,7 @@ public class Permission {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Permission other = (Permission) obj;
+		PermissionEntity other = (PermissionEntity) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

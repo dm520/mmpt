@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import cn.dongming8.mmpt.commons.Constants;
 import cn.dongming8.mmpt.commons.config.JSONManager;
-import cn.dongming8.mmpt.entity.Role;
-import cn.dongming8.mmpt.entity.User;
+import cn.dongming8.mmpt.entity.RoleEntity;
+import cn.dongming8.mmpt.entity.UserEntity;
 
 public class UserDao {
 
@@ -19,19 +19,19 @@ public class UserDao {
 	protected static final String USERS_FILE = Constants.CONFIG_PATH + "users.json";
 	private static int id = 0;// 用户递增ID
 
-	private void write(List<User> userS) throws Exception {
+	private void write(List<UserEntity> userS) throws Exception {
 		JSONManager json = new JSONManager();
 		json.write(USERS_FILE, userS);
 	}
 
-	private List<User> read() throws Exception {
+	private List<UserEntity> read() throws Exception {
 		JSONManager json = new JSONManager();
 		@SuppressWarnings("unchecked")
-		List<User> userS = (List<User>) json.read(USERS_FILE, User.class);
+		List<UserEntity> userS = (List<UserEntity>) json.read(USERS_FILE, UserEntity.class);
 		return userS;
 	}
 
-	public List<User> getUserAll() {
+	public List<UserEntity> getUserAll() {
 		try {
 			return this.read();
 		} catch (Exception e) {
@@ -49,8 +49,8 @@ public class UserDao {
 	public int getNextId() throws Exception {
 		synchronized (UserDao.class) {
 			if (id == 0) {
-				List<User> userList = this.read();
-				for (User user : userList) {
+				List<UserEntity> userList = this.read();
+				for (UserEntity user : userList) {
 					if (id < user.getId()) {
 						id = user.getId();
 					}
@@ -89,13 +89,13 @@ public class UserDao {
 	 * @param id
 	 * @return
 	 */
-	public User getUserById(int id) {
+	public UserEntity getUserById(int id) {
 
-		List<User> userS = null;
-		User result = null;
+		List<UserEntity> userS = null;
+		UserEntity result = null;
 		try {
 			userS = this.read();
-			for (User user : userS) {
+			for (UserEntity user : userS) {
 				if (user != null && id == user.getId()) {
 					result = user;
 					break;
@@ -113,13 +113,13 @@ public class UserDao {
 	 * @param name
 	 * @return
 	 */
-	public User getUserByName(String name) {
+	public UserEntity getUserByName(String name) {
 
-		List<User> userS = null;
-		User result = null;
+		List<UserEntity> userS = null;
+		UserEntity result = null;
 		try {
 			userS = this.read();
-			for (User user : userS) {
+			for (UserEntity user : userS) {
 				if (user != null && name.equals(user.getName())) {
 					result = user;
 					break;
@@ -137,8 +137,8 @@ public class UserDao {
 	 * @param userRole
 	 * @throws Exception
 	 */
-	public void addRole(int id, Role userRole) throws Exception {
-		User user = this.getUserById(id);
+	public void addRole(int id, RoleEntity userRole) throws Exception {
+		UserEntity user = this.getUserById(id);
 		if (user != null) {
 			List<String> userRoles = user.getRoleS();
 			if (userRoles != null && !userRoles.contains(userRole)) {
@@ -154,7 +154,7 @@ public class UserDao {
 	 * @param userRole
 	 * @throws Exception
 	 */
-	public void addRole(User user, Role userRole) throws Exception {
+	public void addRole(UserEntity user, RoleEntity userRole) throws Exception {
 		this.addRole(user.getId(), userRole);
 	}
 
@@ -167,7 +167,7 @@ public class UserDao {
 	 */
 	public void add(String name, String alias, String password) throws Exception {
 		if (this.getUserByName(name) == null) {
-			User user = new User();
+			UserEntity user = new UserEntity();
 			String salt = getNextSalt(name);
 			String passCipherText = getNextPass(password, salt);
 			user.setName(name);
@@ -188,9 +188,9 @@ public class UserDao {
 	 * @param user
 	 * @return
 	 */
-	public boolean isHaveUser(List<User> userS, User user) {
+	public boolean isHaveUser(List<UserEntity> userS, UserEntity user) {
 		boolean result = false;
-		for (User tmpUser : userS) {
+		for (UserEntity tmpUser : userS) {
 			if (tmpUser.getId() == user.getId()) {
 				result = true;
 				break;
@@ -207,8 +207,8 @@ public class UserDao {
 	 * @param user
 	 * @throws Exception
 	 */
-	private void add(User user) throws Exception {
-		List<User> userS = this.read();
+	private void add(UserEntity user) throws Exception {
+		List<UserEntity> userS = this.read();
 		if (userS != null) {
 			if (isHaveUser(userS, user)) {
 				throw new Exception("该用户名已经存在,请修改后重试！");
@@ -224,8 +224,8 @@ public class UserDao {
 	 * @param user
 	 * @throws Exception
 	 */
-	public void del(User user) throws Exception {
-		List<User> userS = this.read();
+	public void del(UserEntity user) throws Exception {
+		List<UserEntity> userS = this.read();
 		if (userS != null) {
 			if (!userS.contains(user)) {
 				// 没有该用户数据
@@ -242,12 +242,12 @@ public class UserDao {
 	 * @throws Exception
 	 */
 	public void del(int id) throws Exception {
-		this.del(new User(id));
+		this.del(new UserEntity(id));
 	}
 
-	private void update(int id, User user) throws Exception {
-		List<User> userS = this.read();
-		User temp = new User(id);
+	private void update(int id, UserEntity user) throws Exception {
+		List<UserEntity> userS = this.read();
+		UserEntity temp = new UserEntity(id);
 		if (userS != null) {
 			if (!userS.contains(temp)) {
 				// 没有该用户数据
@@ -267,7 +267,7 @@ public class UserDao {
 	 * @throws Exception
 	 */
 	public void updateAliasName(int id, String userAliasName) throws Exception {
-		User user = this.getUserById(id);
+		UserEntity user = this.getUserById(id);
 		user.setAlias(userAliasName);
 		this.update(id, user);
 	}
@@ -279,7 +279,7 @@ public class UserDao {
 	 * @throws Exception
 	 */
 	public boolean isAuthenticat(int id, String password) throws Exception {
-		User user = this.getUserById(id);
+		UserEntity user = this.getUserById(id);
 		String pass = user.getPassword();
 		String salt = user.getSalt();
 		String passwordText = this.getNextPass(password, salt);// 旧密码
@@ -296,7 +296,7 @@ public class UserDao {
 	public void updatePassword(int id, String oldPassword, String newPassword) throws Exception {
 
 		if (isAuthenticat(id, oldPassword)) {
-			User user = this.getUserById(id);
+			UserEntity user = this.getUserById(id);
 			String userName = user.getName();
 			String salt = this.getNextSalt(userName);
 			String passCipherText = this.getNextPass(newPassword, salt);
@@ -316,19 +316,19 @@ public class UserDao {
 	 * @throws Exception
 	 */
 	public void updateUserRoleS(int id, List<String> userRoleS) throws Exception {
-		User user = this.getUserById(id);
+		UserEntity user = this.getUserById(id);
 		user.setRoleS(userRoleS);
 		this.update(id, user);
 	}
 
 	public void addUserRoleS(String name, List<String> userRoleS) throws Exception {
-		User user = this.getUserByName(name);
+		UserEntity user = this.getUserByName(name);
 		user.setRoleS(userRoleS);
 		this.update(id, user);
 	}
 
 	public void delAll() throws Exception {
-		List<User> userS = this.read();
+		List<UserEntity> userS = this.read();
 		if (userS != null) {
 			userS.clear();
 			this.write(userS);
