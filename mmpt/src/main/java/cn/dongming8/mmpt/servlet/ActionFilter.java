@@ -175,7 +175,7 @@ public class ActionFilter extends ServletContextSupport implements Filter {
 				if (filePathArr != null && filePathArr.length == 2) {
 					String actionFileName = filePathArr[1].substring(0, filePathArr[1].length() - 6);
 					
-					String actionKey = "action/"+actionFileName.replace(File.separator, "/") + ".do";
+					String actionKey = "/action/"+actionFileName.replace(File.separator, "/") + ".do";
 					actionFileName = actionFileName.replace(File.separator, ".");
 					//System.out.println("actionFileName = " + actionFileName);
 					//System.out.println("actionKey = " + actionKey);
