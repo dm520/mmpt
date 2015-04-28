@@ -1,7 +1,61 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+
+	<display-name>MMPT</display-name>
+	<!-- <listener> <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class> 
+		</listener> -->
+	<filter>
+		<filter-name>ShiroFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>
+			[main]
+			authc.loginUrl=/login.html
+			logout.redirectUrl=/login.html
+			myRealm=cn.dongming8.mmpt.dao.JsonFileRealm
+			securityManager.realms=$myRealm
+			
+			
+			[urls]
+			/action/LoginAction.do=anon
+			/action/LogoutAction.do=logout
+			/action/**=authc
+			/app/**=authc
+			
+			</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ShiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>actionFilter</filter-name>
+		<filter-class>cn.dongming8.mmpt.servlet.ActionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>actionFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<!-- <filter> <filter-name>ShiroFilter</filter-name> <filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class> 
+		<init-param> <param-name>config</param-name> <param-value> [main] authc.loginUrl 
+		= /login.html #cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager 
+		#securityManager.cacheManager = $cacheManager jsonRealm = com.unimas.cs.dao.JsonRealm 
+		securityManager.realms = $jsonRealm [urls] /login.html = authc /logout = 
+		logout </param-value> </init-param> </filter> <filter-mapping> <filter-name>ShiroFilter</filter-name> 
+		<url-pattern>/*</url-pattern> </filter-mapping> -->
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>module.html</welcome-file>
+	</welcome-file-list>
+
 </web-app>

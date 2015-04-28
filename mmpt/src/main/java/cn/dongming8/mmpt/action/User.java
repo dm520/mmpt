@@ -23,8 +23,8 @@ import cn.dongming8.mmpt.service.PermitService;
  * @author Administrator
  * 
  */
-public class UserAction {
-	private static final Logger log = LoggerFactory.getLogger(UserAction.class);
+public class User {
+	private static final Logger log = LoggerFactory.getLogger(User.class);
 
 	/**
 	 * 添加用户信息

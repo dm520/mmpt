@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import cn.dongming8.mmpt.commons.config.ConfigUtil;
 import cn.dongming8.mmpt.service.PermitService;
 
-public class LogoutAction {
-	private static final Logger log = LoggerFactory.getLogger(LogoutAction.class);
+public class Logout {
+	private static final Logger log = LoggerFactory.getLogger(Logout.class);
 
 	/**
 	 * 用户登出

@@ -19,8 +19,8 @@ import cn.dongming8.mmpt.entity.Permission;
  * @author Administrator
  * 
  */
-public class PermissionAction {
-	private static final Logger log = LoggerFactory.getLogger(PermissionAction.class);
+public class Permission {
+	private static final Logger log = LoggerFactory.getLogger(Permission.class);
 
 	public List<?> getTreeInfo(List<Permission> permissionList) {
 		return null;

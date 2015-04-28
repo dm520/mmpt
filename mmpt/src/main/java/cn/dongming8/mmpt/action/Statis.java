@@ -4,6 +4,6 @@ package cn.dongming8.mmpt.action;
  * @author Administrator
  *
  */
-public class StatisAction {
+public class Statis {
 
 }

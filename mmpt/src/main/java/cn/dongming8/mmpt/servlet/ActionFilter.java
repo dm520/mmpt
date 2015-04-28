@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.shiro.web.servlet.ServletContextSupport;
 //import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,6 +28,7 @@ public class ActionFilter extends ServletContextSupport implements Filter {
 
 	private static final Logger log = LoggerFactory.getLogger(ActionFilter.class);
 	private static Map<String, Object> actionObjectMap = new HashMap<String, Object>();
+	private static String pathStr = null;
 
 	public void destroy() {
 		log.info("destroy");
@@ -107,22 +111,6 @@ public class ActionFilter extends ServletContextSupport implements Filter {
 					log.info("servletPath=" + servletPath);
 					log.info("method=" + method);
 					// log.info("result=" + result);
-
-					/*
-					 * if ("/action/LoginAction.do".equals(servletPath) &&
-					 * "login".equals(method) &&
-					 * "{\"success\":true}".equals(result)) { log.info("登录成功！");
-					 * httpRes.sendRedirect(httpReq.getContextPath() +
-					 * "/app/index/module.html");
-					 * 
-					 * } else if ("/action/LogoutAction.do".equals(servletPath)
-					 * && "logout".equals(method)&&
-					 * "{\"success\":true}".equals(result)) { log.info("退出成功！");
-					 * httpRes
-					 * .sendRedirect(httpReq.getContextPath()+"/index.html");
-					 * 
-					 * }else {
-					 */
 					// response.setContentType("application/json");
 					response.getWriter().write(result);
 					// }
@@ -144,36 +132,37 @@ public class ActionFilter extends ServletContextSupport implements Filter {
 		response.flushBuffer();
 	}
 
-	public void init(FilterConfig config) throws ServletException {
+	/**
+	 * 
+	 * @param rootFile
+	 * @return
+	 */
+	private File getActionFile(File rootFile) {
+		Collection<File> fileList = FileUtils.listFilesAndDirs(rootFile, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
+		//System.out.println(fileList);
+		for (File file : fileList) {
+			if (file.isDirectory() && file.getName().equals("action")) {
+				return file;
+			}
+		}
+		return null;
+	}
 
+	public void init(FilterConfig config) throws ServletException {
 		log.info("init action class");
 		URL url = this.getClass().getClassLoader().getResource("");
 		String rootPath = url.getPath();
-		String actionPath = rootPath + "com/unimas/ufs/action";
-		log.info("actionPath = {}",actionPath);
-		File actionFile = new File(actionPath);
+		File rootFile = new File(rootPath);
+		File actionFile = getActionFile(rootFile);
+		log.info("rootPath = {}", rootPath);
 		log.info("Instance action class");
+		log.info("actionFile = {}", actionFile);
+		pathStr = actionFile.getAbsolutePath().split("classes\\"+File.separator)[1].replaceAll(File.separator, ".")+".";
+		log.info("pathStr = {}", pathStr);
 		this.getActionObject(actionFile, actionObjectMap);
-		// if (config != null) {
-		// String roleUrl = config.getInitParameter("roleUrl");
-		// if(StringUtils.isNotEmpty(roleUrl)){
-		// new UrlRoleDao().updateUrlRoleFromCas(roleUrl);
-		// }
-		// String redlistUrl = config.getInitParameter("redlistUrl");
-		// if(StringUtils.isNotEmpty(redlistUrl)){
-		// new RedListDao().updateRedListFromCas(redlistUrl);
-		// }
-		// String rolePz = config.getInitParameter("rolePz");
-		// if(StringUtils.isNotEmpty(rolePz)){
-		// new UserRoleDao().updateRolePzFromCas(rolePz);
-		// }
-		// }
-
 	}
 
 	private void getActionObject(File file, Map<String, Object> actionObjectMap) {
-
-		String classPath = "com.unimas.ufs";
 		if (file != null) {
 			if (file.isDirectory()) {
 				File[] files = file.listFiles();
@@ -182,14 +171,15 @@ public class ActionFilter extends ServletContextSupport implements Filter {
 				}
 			} else if (file.isFile()) {
 				String filePath = file.getAbsolutePath();
-				String[] filePathArr = filePath.split("\\" + File.separator + "com" + "\\" + File.separator + "unimas"
-						+ "\\" + File.separator + "ufs");
+				String[] filePathArr = filePath.split("\\" + File.separator + "action" + "\\" + File.separator);
 				if (filePathArr != null && filePathArr.length == 2) {
 					String actionFileName = filePathArr[1].substring(0, filePathArr[1].length() - 6);
-					// System.out.println("actionFileName = "+actionFileName );
-					String actionKey = actionFileName.replace(File.separator, "/") + ".do";
+					
+					String actionKey = "action/"+actionFileName.replace(File.separator, "/") + ".do";
 					actionFileName = actionFileName.replace(File.separator, ".");
-					actionObjectMap.put(actionKey, this.InstanceObject(classPath + actionFileName));
+					//System.out.println("actionFileName = " + actionFileName);
+					//System.out.println("actionKey = " + actionKey);
+					actionObjectMap.put(actionKey, this.InstanceObject(pathStr + actionFileName));
 				}
 			}
 		}

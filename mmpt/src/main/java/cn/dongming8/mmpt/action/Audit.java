@@ -6,7 +6,7 @@ package cn.dongming8.mmpt.action;
  * @author Administrator
  * 
  */
-public class AuditAction {
+public class Audit {
 	public String query() {
 
 		return null;

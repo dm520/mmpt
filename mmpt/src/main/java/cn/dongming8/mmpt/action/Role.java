@@ -26,8 +26,8 @@ import cn.dongming8.mmpt.service.PermitService;
  * @author Administrator
  * 
  */
-public class RoleAction {
-	private static final Logger log = LoggerFactory.getLogger(RoleAction.class);
+public class Role {
+	private static final Logger log = LoggerFactory.getLogger(Role.class);
 
 	/**
 	 * 添加角色信息
